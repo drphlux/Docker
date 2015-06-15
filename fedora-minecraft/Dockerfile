@@ -4,8 +4,8 @@ MAINTAINER DrPhlux
 
 RUN dnf -q clean all;dnf -q -y upgrade;dnf -q -y install bzip2 wget gpg sudo js
 
-RUN wget -O /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol7
-RUN gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+RUN dnf -q -y reinstall glibc-common
+RUN localedef --list-archive | grep -v en_GB.utf8 | xargs localedef --delete-from-archive
 
 RUN wget --no-cookies --no-check-certificate --header \
     "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
@@ -36,6 +36,10 @@ CMD [ "/start" ]
 
 # Special marker ENV used by MCCY management tool
 ENV MC_IMAGE=YES
+
+ENV LANG en_GB.utf8  
+ENV LANGUAGE en_GB:en  
+ENV LC_ALL en_GB.utf8
 
 ENV UID=1003
 ENV UIG=1003
